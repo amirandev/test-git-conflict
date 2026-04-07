@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Contact Us - MY BLOG</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+  body { background-color: #f1f1f1; }
+  .w3-content { max-width: 1400px; }
+  
+  /* Form Styles */
+  .contact-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .contact-card:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  }
+  .form-input, .form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    margin: 8px 0 16px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: "Raleway", sans-serif;
+    transition: border 0.3s;
+    background-color: #fafafa;
+  }
+  .form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: #555;
+    background-color: #fff;
+  }
+  .form-input.error, .form-textarea.error {
+    border-color: #c62828;
+    background-color: #ffebee;
+  }
+  .form-input.success, .form-textarea.success {
+    border-color: #4caf50;
+    background-color: #e8f5e9;
+  }
+  .error-msg {
+    color: #c62828;
+    font-size: 13px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    display: none;
+    padding-left: 4px;
+  }
+  .error-msg.visible { display: block; }
+  
+  .char-count {
+    text-align: right;
+    font-size: 12px;
+    color: #999;
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
+  
+  .submit-btn {
+    background-color: #333 !important;
+    color: white !important;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: "Raleway", sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+  }
+  .submit-btn:hover {
+    background-color: #555 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  .submit-btn:active {
+    transform: translateY(0);
+  }
+  .submit-btn:disabled {
+    background-color: #999 !important;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Info Cards */
+  .info-card {
+    background: #fff;
+    padding: 24px;
+    text-align: center;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    height: 100%;
+    transition: all 0.3s ease;
+  }
+  .info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+  .info-card i {
+    font-size: 32px;
+    color: #555;
+    margin-bottom: 12px;
+  }
+  .info-card h5 {
+    margin: 8px 0 4px;
+    font-weight: 700;
+  }
+  .info-card p {
+    color: #666;
+    margin: 0;
+  }
+
+  /* Map */
+  .map-box {
+    background: #e0e0e0;
+    border-radius: 4px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+    margin-top: 15px;
+    position: relative;
+    overflow: hidden;
+  }
+  .map-box::after {
+    content: "Map Placeholder";
+    position: absolute;
+  }
+
+  /* Accordion */
+  .accordion-btn {
+    background-color: #f8f8f8;
+    cursor: pointer;
+    padding: 14px;
+    width: 100%;
+    border: 1px solid #ddd;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: "Raleway", sans-serif;
+    transition: background-color 0.3s;
+    margin-bottom: 4px;
+    border-radius: 4px;
+  }
+  .accordion-btn:hover { background-color: #eee; }
+  .accordion-btn.active { background-color: #f1f1f1; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  .accordion-content {
+    padding: 0 14px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease;
+    border: 1px solid #ddd;
+    border-top: none;
+    margin-bottom: 4px;
+    border-radius: 0 0 4px 4px;
+  }
+
+  /* Toast */
+  #toast {
+    visibility: hidden;
+    min-width: 280px;
+    background-color: #4caf50;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    transform: translateX(-50%) translateY(30px);
+    bottom: 30px;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  #toast.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  #toast.error { background-color: #c62828; }
+
+  /* Social */
+  .social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f1f1f1;
+    color: #555;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+  .social-link:hover {
+    background: #333;
+    color: #fff;
+    transform: scale(1.1);
+  }
+</style>
+</head>
+<body>
+
+<div class="w3-content" style="max-width:1400px">
+
+<!-- Header -->
+<header class="w3-container w3-center w3-padding-48"> 
+  <h1><b>MY BLOG</b></h1>
+  <p>Welcome to the blog of <span class="w3-tag">unknown</span></p>
+  <!-- Breadcrumb / Nav -->
+  <nav class="w3-bar w3-margin-top" style="max-width:400px; margin-left:auto; margin-right:auto">
+    <a href="index.html" class="w3-bar-item w3-btn w3-light-grey" style="border-radius:4px 0 0 4px"><i class="fas fa-home"></i> Back to Home</a>
+    <span class="w3-bar-item w3-dark-grey w3-button w3-text-white" style="cursor:default; border-radius:0 4px 4px 0"><i class="fas fa-envelope"></i> Contact</span>
+  </nav>
+</header>
+
+<!-- Main Grid -->
+<div class="w3-row w3-margin-bottom">
+  <div class="w3-col l12 w3-center w3-margin-bottom">
+    <h2>Get In Touch</h2>
+    <p class="w3-large w3-text-grey">Have a question, suggestion, or just want to say hello? Fill out the form below.</p>
+  </div>
+</div>
+
+<!-- Contact Info Row -->
+<div class="w3-row-padding w3-margin-bottom">
+  <div class="w3-third w3-margin-bottom">
+    <div class="info-card">
+      <i class="fas fa-map-marker-alt"></i>
+      <h5>Address</h5>
+      <p>123 Blog Street, New York, NY 10001</p>
+    </div>
+  </div>
+  <div class="w3-third w3-margin-bottom">
+    <div class="info-card">
+      <i class="fas fa-phone-alt"></i>
+      <h5>Phone</h5>
+      <p>+1 (555) 123-4567</p>
+    </div>
+  </div>
+  <div class="w3-third w3-margin-bottom">
+    <div class="info-card">
+      <i class="fas fa-at"></i>
+      <h5>Email</h5>
+      <p>hello@myblog.com</p>
+    </div>
+  </div>
+</div>
+
+<div class="w3-row w3-margin-bottom">
+  <!-- Contact Form Column -->
+  <div class="w3-col l8 s12 w3-margin-bottom">
+    <div class="contact-card">
+      <h4 style="border-bottom: 2px solid #f1f1f1; padding-bottom: 10px; margin-bottom: 20px;">
+        <i class="fas fa-paper-plane w3-text-dark-grey w3-margin-right"></i>Send a Message
+      </h4>
+      <form id="contactForm" onsubmit="return handleSubmit(event)">
+        <div class="w3-row-padding">
+          <div class="w3-half">
+            <label for="fname">Full Name *</label>
+            <input class="form-input" id="fname" type="text" placeholder="John Doe" oninput="validate('fname')">
+            <div class="error-msg" id="fname-err">Please enter your full name.</div>
+          </div>
+          <div class="w3-half">
+            <label for="cemail">Email *</label>
+            <input class="form-input" id="cemail" type="text" placeholder="john@example.com" oninput="validate('cemail')">
+            <div class="error-msg" id="cemail-err">Please enter a valid email address.</div>
+          </div>
+        </div>
+
+        <label for="subject">Subject *</label>
+        <input class="form-input" id="subject" type="text" placeholder="What is this regarding?" oninput="validate('subject')">
+        <div class="error-msg" id="subject-err">Subject line cannot be empty.</div>
+
+        <label for="message">Message *</label>
+        <textarea class="form-textarea" id="message" placeholder="Write something..." style="height:160px" oninput="validate('message'); updateCount()"></textarea>
+        <div class="error-msg" id="message-err">Message must be at least 10 characters long.</div>
+        <div class="char-count"><span id="count">0</span>/1000</div>
+
+        <div class="w3-row-padding">
+          <div class="w3-half">
+            <label for="phone">Phone (Optional)</label>
+            <input class="form-input" id="phone" type="text" placeholder="+1 (555) 000-0000">
+          </div>
+          <div class="w3-half w3-container">
+            <label class="w3-check" style="margin-top:20px">
+              <input type="checkbox" id="newsletter">
+              <span style="font-size:14px; color:#555">Subscribe to the newsletter</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="w3-margin-top">
+          <button type="submit" class="submit-btn" id="submitBtn">
+            Send Message <i class="fas fa-arrow-right w3-margin-left"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Map & Details Column -->
+  <div class="w3-col l4 s12 w3-margin-bottom">
+    <div class="contact-card" style="height:100%">
+      <h4><i class="fas fa-location-dot w3-text-dark-grey w3-margin-right"></i>Find Me</h4>
+      <div class="map-box w3-light-grey">
+        <i class="fas fa-map-marked-alt w3-xxlarge"></i>
+      </div>
+      
+      <div class="w3-margin-top">
+        <h5><i class="fas fa-clock w3-text-dark-grey w3-margin-right"></i>Office Hours</h5>
+        <ul class="w3-ul w3-small" style="border:none">
+          <li><b>Monday - Friday:</b> 9:00 AM - 6:00 PM</li>
+          <li><b>Saturday:</b> 10:00 AM - 4:00 PM</li>
+          <li><b>Sunday:</b> Closed</li>
+        </ul>
+      </div>
+
+      <hr>
+      
+      <div class="w3-center w3-margin-bottom">
+        <h5>Connect with me</h5>
+        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="w3-row w3-margin-bottom">
+  <div class="w3-col l12">
+    <div class="contact-card">
+      <h4 style="border-bottom: 2px solid #f1f1f1; padding-bottom: 10px; margin-bottom: 20px;">
+        <i class="fas fa-question-circle w3-text-dark-grey w3-margin-right"></i>Frequently Asked Questions
+      </h4>
+      
+      <button class="accordion-btn">How quickly will you respond? <i class="fas fa-chevron-down w3-right"></i></button>
+      <div class="accordion-content">
+        <p>I usually respond within 24 to 48 hours on business days.</p>
+      </div>
+
+      <button class="accordion-btn">Do you accept guest posts? <i class="fas fa-chevron-down w3-right"></i></button>
+      <div class="accordion-content">
+        <p>Yes! Please send me a topic outline or draft via the form above, and we can discuss it.</p>
+      </div>
+
+      <button class="accordion-btn">Can I collaborate on a project? <i class="fas fa-chevron-down w3-right"></i></button>
+      <div class="accordion-content">
+        <p>Absolutely. I'm always open to interesting ideas. Let me know what you have in mind!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
+  <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">Previous</button>
+  <button class="w3-button w3-black w3-padding-large w3-margin-bottom">Next »</button>
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+</footer>
+
+</div>
+
+<!-- Toast Notification -->
+<div id="toast"></div>
+
+<script>
+// Form Validation
+function validate(id) {
+  var el = document.getElementById(id);
+  var err = document.getElementById(id + '-err');
+  var val = el.value.trim();
+  var isValid = true;
+
+  // Reset state
+  el.classList.remove('error', 'success');
+  err.classList.remove('visible');
+
+  if (id === 'fname') {
+    if (val.length < 2) isValid = false;
+  } else if (id === 'cemail') {
+    var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(val)) isValid = false;
+  } else if (id === 'subject') {
+    if (val.length < 1) isValid = false;
+  } else if (id === 'message') {
+    if (val.length < 10) isValid = false;
+  }
+
+  if (!isValid && val.length > 0) {
+    el.classList.add('error');
+    err.classList.add('visible');
+  } else if (val.length > 0) {
+    el.classList.add('success');
+  }
+  
+  return isValid;
+}
+
+function updateCount() {
+  var msg = document.getElementById('message');
+  document.getElementById('count').textContent = msg.value.length;
+}
+
+// Submit Handler
+function handleSubmit(e) {
+  e.preventDefault();
+  
+  var fields = ['fname', 'cemail', 'subject', 'message'];
+  var allGood = true;
+
+  for (var i = 0; i < fields.length; i++) {
+    var field = fields[i];
+    if (!validate(field)) {
+      // If field is empty, show error immediately
+      var el = document.getElementById(field);
+      if (el.value.trim() === '') {
+        el.classList.add('error');
+        document.getElementById(field + '-err').classList.add('visible');
+        allGood = false;
+      } else {
+        allGood = false;
+      }
+    }
+  }
+
+  if (!allGood) {
+    showToast('Please fix the errors highlighted below.', true);
+    return false;
+  }
+
+  // Simulate sending
+  var btn = document.getElementById('submitBtn');
+  var originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+  setTimeout(function() {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+    document.getElementById('contactForm').reset();
+    document.getElementById('count').textContent = '0';
+    
+    // Reset styles
+    fields.forEach(function(f) {
+      var el = document.getElementById(f);
+      el.classList.remove('success', 'error');
+      document.getElementById(f + '-err').classList.remove('visible');
+    });
+
+    showToast('Message sent successfully! I will get back to you soon.');
+  }, 1500);
+
+  return false;
+}
+
+// Toast Notification
+function showToast(message, isError) {
+  var toast = document.getElementById('toast');
+  toast.textContent = message;
+  if (isError) {
+    toast.className = 'show error';
+  } else {
+    toast.className = 'show';
+  }
+  setTimeout(function() { 
+    toast.className = toast.className.replace('show', ''); 
+  }, 3000);
+}
+
+// Accordion Logic
+var acc = document.getElementsByClassName('accordion-btn');
+for (var i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    var icon = this.querySelector('i');
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+      panel.style.padding = "0 14px";
+      if(icon) { icon.className = 'fas fa-chevron-down w3-right'; }
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+      panel.style.padding = "14px";
+      if(icon) { icon.className = 'fas fa-chevron-up w3-right'; }
+    } 
+  });
+}
+</script>
+
+</body>
+</html>
+
