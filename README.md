@@ -1,1 +1,1 @@
-# test-git-conflict
+# Git conflict example
